@@ -10,9 +10,11 @@ public class Vaerk {
 
 	public int id = -1;
 
-	public long contentLength = 0;
+	public String titel;
 
-	public List<Representation> representationls = new LinkedList<Representation>();
+	public List<Representation> representations = new LinkedList<Representation>();
+
+	public long contentLength = 0;
 
 	public static Vaerk fromXml(Node parentNode) {
 		Node tmpNode;
@@ -28,11 +30,17 @@ public class Vaerk {
 					tmpNode = tmpNode.getFirstChild();
 					if (tmpNode != null) {
 						try {
-							System.out.println(tmpNode.getNodeValue());
+							System.out.println("vaerkId: " + tmpNode.getNodeValue());
 							vaerk.id = Integer.parseInt(tmpNode.getNodeValue());
 						} catch (NumberFormatException e) {
 							System.out.println("Epic fail!");
 						}
+					}
+				} else if ("titel".equals(tmpName)) {
+					tmpNode = tmpNode.getFirstChild();
+					if (tmpNode != null) {
+						System.out.println("vaerkTitel: " + tmpNode.getNodeValue());
+						vaerk.titel = tmpNode.getNodeValue();
 					}
 				} else if ("representations".equals(tmpName)) {
 					NodeList representationsChildren = tmpNode.getChildNodes();
@@ -42,7 +50,7 @@ public class Vaerk {
 						if (tmpNode.getNodeType() == Node.ELEMENT_NODE) {
 							if ("representation".equals(tmpName)) {
 								representation = Representation.fromXml(tmpNode);
-								vaerk.representationls.add(representation);
+								vaerk.representations.add(representation);
 							}
 						}
 					}

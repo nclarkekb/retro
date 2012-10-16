@@ -3,53 +3,57 @@ package dk.kb.retro;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class Representation {
+public class Issue {
+
+	public int perid = 1;
+
+	public int numid = -1;
 
 	public int vaerkid = -1;
 
-	public int reprid = -1;
-
-	public String url;
-
-	public static Representation fromXml(Node parentNode) {
+	public static Issue fromXml(Node parentNode) {
 		Node tmpNode;
 		String tmpName;
-		Representation representation = new Representation();
+		Issue issue = new Issue();
 		NodeList representationChildren = parentNode.getChildNodes();
 		for (int k=0; k<representationChildren.getLength(); ++k) {
 			tmpNode = representationChildren.item(k);
 			tmpName = tmpNode.getNodeName();
 			if (tmpNode.getNodeType() == Node.ELEMENT_NODE) {
-				if ("vaerkid".equals(tmpName)) {
+				if ("perid".equals(tmpName)) {
 					tmpNode = tmpNode.getFirstChild();
 					if (tmpNode != null) {
 						try {
-							System.out.println("reprVaerkId: " + tmpNode.getNodeValue());
-							representation.vaerkid = Integer.parseInt(tmpNode.getNodeValue());
+							System.out.println("issuePerId: " + tmpNode.getNodeValue());
+							issue.perid = Integer.parseInt(tmpNode.getNodeValue());
 						} catch (NumberFormatException e) {
 							System.out.println("Epic fail!");
 						}
 					}
-				} else if ("reprid".equals(tmpName)) {
+				} else if ("numid".equals(tmpName)) {
 					tmpNode = tmpNode.getFirstChild();
 					if (tmpNode != null) {
 						try {
-							System.out.println("reprId: " + tmpNode.getNodeValue());
-							representation.reprid = Integer.parseInt(tmpNode.getNodeValue());
+							System.out.println("issueNumId: " + tmpNode.getNodeValue());
+							issue.numid = Integer.parseInt(tmpNode.getNodeValue());
 						} catch (NumberFormatException e) {
 							System.out.println("Epic fail!");
 						}
 					}
-				} else if ("url".equals(tmpName)) {
+				} else if ("vaerkid".equals(tmpName)) {
 					tmpNode = tmpNode.getFirstChild();
 					if (tmpNode != null) {
-						System.out.println("reprUrl: " + tmpNode.getNodeValue());
-						representation.url = tmpNode.getNodeValue();
+						try {
+							System.out.println("issueVaerkId: " + tmpNode.getNodeValue());
+							issue.vaerkid = Integer.parseInt(tmpNode.getNodeValue());
+						} catch (NumberFormatException e) {
+							System.out.println("Epic fail!");
+						}
 					}
 				}
 			}
 		}
-		return representation;
+		return issue;
 	}
 
 }

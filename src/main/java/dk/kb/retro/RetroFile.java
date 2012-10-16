@@ -79,11 +79,13 @@ public class RetroFile implements ArchiveParserCallback {
 					if ("periodica".equals(rootName)) {
 						periodica = Periodica.fromXml(rootNode);
 						periodica.contentLength = warcRecord.header.contentLength;
-						System.out.println(periodica.perId);
+						// debug
+						//System.out.println(periodica.perId);
 					} else if ("vaerk".equals(rootName)) {
 						vaerk = Vaerk.fromXml(rootNode);
 						vaerk.contentLength = warcRecord.header.contentLength;
-						System.out.println(vaerk.id);
+						// debug
+						//System.out.println(vaerk.id);
 					}
 				}
 			}
