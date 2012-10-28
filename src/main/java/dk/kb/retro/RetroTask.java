@@ -148,11 +148,27 @@ public class RetroTask extends Task {
 				}
 			}
 			cout.println("Output Thread stopped.");
+			cout.println("Checking for missing URI referenced in warc headers.");
 			iter = refUris.iterator();
 			while (iter.hasNext()) {
 				uri = iter.next();
 				if (!uris.contains(uri)) {
 					++missing_uris;
+				}
+			}
+			cout.println("Checking for missing vaerk referenced in issues.");
+			Iterator<Map.Entry<Integer, Periodica>> pIter = periodicas.entrySet().iterator();
+			Map.Entry<Integer, Periodica> pEntry;
+			Periodica periodica;
+			Issue issue;
+			while (pIter.hasNext()) {
+				pEntry = pIter.next();
+				periodica = pEntry.getValue();
+				for (int i=0; i<periodica.issues.size(); ++i) {
+					issue = periodica.issues.get(i);
+					if (!vaerks.containsKey(issue.vaerkid)) {
+						System.out.println("Missing vaerk: " + issue.vaerkid);
+					}
 				}
 			}
 		}

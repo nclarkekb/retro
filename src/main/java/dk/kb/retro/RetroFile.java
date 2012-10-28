@@ -70,7 +70,7 @@ public class RetroFile implements ArchiveParserCallback {
 			//System.out.println(contentType.toString());
 			//System.out.println(warcRecord.header.warcRecordIdStr);
 			if (warcRecord.hasPayload()) {
-				xmlValidator.parse(warcRecord.getPayload().getInputStream());
+				xmlValidator.parse(warcRecord.getPayload().getInputStream(), null);
 				if (xmlValidator.document != null) {
 					//System.out.println(xmlValidator.document);
 					//System.out.println(xmlValidator.document.getDocumentElement().getNodeName());

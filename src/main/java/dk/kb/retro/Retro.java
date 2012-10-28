@@ -34,7 +34,7 @@ public class Retro {
 		if ( arguments == null ) {
 			System.out.println( "Retro v0.1.0" );
 			System.out.println( "usage: Retro [-w] [file ...]" );
-			System.out.println( " -w<x>  thread(s)" );
+			System.out.println( " -w<x> thread(s)" );
 		}
 		else {
 			//String path = "kb-pligtsystem-";

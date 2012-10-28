@@ -10,6 +10,9 @@ public class Vaerk {
 
 	public int id = -1;
 
+	// TODO
+	//<opretsys>Monografi. Ikke et periodika.</opretsys>
+
 	public String titel;
 
 	public List<Representation> representations = new LinkedList<Representation>();
