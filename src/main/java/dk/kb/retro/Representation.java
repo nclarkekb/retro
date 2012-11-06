@@ -24,7 +24,8 @@ public class Representation {
 					tmpNode = tmpNode.getFirstChild();
 					if (tmpNode != null) {
 						try {
-							System.out.println("reprVaerkId: " + tmpNode.getNodeValue());
+							// debug
+							//System.out.println("reprVaerkId: " + tmpNode.getNodeValue());
 							representation.vaerkid = Integer.parseInt(tmpNode.getNodeValue());
 						} catch (NumberFormatException e) {
 							System.out.println("Epic fail!");
@@ -34,7 +35,8 @@ public class Representation {
 					tmpNode = tmpNode.getFirstChild();
 					if (tmpNode != null) {
 						try {
-							System.out.println("reprId: " + tmpNode.getNodeValue());
+							// debug
+							//System.out.println("reprId: " + tmpNode.getNodeValue());
 							representation.reprid = Integer.parseInt(tmpNode.getNodeValue());
 						} catch (NumberFormatException e) {
 							System.out.println("Epic fail!");
@@ -43,7 +45,8 @@ public class Representation {
 				} else if ("url".equals(tmpName)) {
 					tmpNode = tmpNode.getFirstChild();
 					if (tmpNode != null) {
-						System.out.println("reprUrl: " + tmpNode.getNodeValue());
+						// debug
+						//System.out.println("reprUrl: " + tmpNode.getNodeValue());
 						representation.url = tmpNode.getNodeValue();
 					}
 				}

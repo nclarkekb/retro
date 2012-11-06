@@ -11,6 +11,9 @@ public class Issue {
 
 	public int vaerkid = -1;
 
+	// Set during validation!
+	public Vaerk vaerk;
+
 	public static Issue fromXml(Node parentNode) {
 		Node tmpNode;
 		String tmpName;
@@ -24,7 +27,8 @@ public class Issue {
 					tmpNode = tmpNode.getFirstChild();
 					if (tmpNode != null) {
 						try {
-							System.out.println("issuePerId: " + tmpNode.getNodeValue());
+							// debug
+							//System.out.println("issuePerId: " + tmpNode.getNodeValue());
 							issue.perid = Integer.parseInt(tmpNode.getNodeValue());
 						} catch (NumberFormatException e) {
 							System.out.println("Epic fail!");
@@ -34,7 +38,8 @@ public class Issue {
 					tmpNode = tmpNode.getFirstChild();
 					if (tmpNode != null) {
 						try {
-							System.out.println("issueNumId: " + tmpNode.getNodeValue());
+							// debug
+							//System.out.println("issueNumId: " + tmpNode.getNodeValue());
 							issue.numid = Integer.parseInt(tmpNode.getNodeValue());
 						} catch (NumberFormatException e) {
 							System.out.println("Epic fail!");
@@ -44,7 +49,8 @@ public class Issue {
 					tmpNode = tmpNode.getFirstChild();
 					if (tmpNode != null) {
 						try {
-							System.out.println("issueVaerkId: " + tmpNode.getNodeValue());
+							// debug
+							//System.out.println("issueVaerkId: " + tmpNode.getNodeValue());
 							issue.vaerkid = Integer.parseInt(tmpNode.getNodeValue());
 						} catch (NumberFormatException e) {
 							System.out.println("Epic fail!");

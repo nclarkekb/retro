@@ -6,12 +6,13 @@ import java.util.List;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class Vaerk {
+public class Vaerk implements Comparable<Vaerk> {
 
 	public int id = -1;
 
-	// TODO
-	//<opretsys>Monografi. Ikke et periodika.</opretsys>
+	// <opretsys>Monografi. Ikke et periodika.</opretsys>
+	// <opretsys>Periodika.</opretsys>
+	public int periodica = -1;
 
 	public String titel;
 
@@ -33,16 +34,28 @@ public class Vaerk {
 					tmpNode = tmpNode.getFirstChild();
 					if (tmpNode != null) {
 						try {
-							System.out.println("vaerkId: " + tmpNode.getNodeValue());
+							// debug
+							//System.out.println("vaerkId: " + tmpNode.getNodeValue());
 							vaerk.id = Integer.parseInt(tmpNode.getNodeValue());
 						} catch (NumberFormatException e) {
 							System.out.println("Epic fail!");
 						}
 					}
+				} else if ("opretsys".equals(tmpName)) {
+					tmpNode = tmpNode.getFirstChild();
+					if (tmpNode != null) {
+						String tmpNodeValue = tmpNode.getNodeValue();
+						if ("Periodika.".equals(tmpNodeValue)) {
+							vaerk.periodica = 1;
+						} else if ("Monografi. Ikke et periodika.".equals(tmpNodeValue)) {
+							vaerk.periodica = 0;
+						}
+					}
 				} else if ("titel".equals(tmpName)) {
 					tmpNode = tmpNode.getFirstChild();
 					if (tmpNode != null) {
-						System.out.println("vaerkTitel: " + tmpNode.getNodeValue());
+						// debug
+						//System.out.println("vaerkTitel: " + tmpNode.getNodeValue());
 						vaerk.titel = tmpNode.getNodeValue();
 					}
 				} else if ("representations".equals(tmpName)) {
@@ -61,6 +74,11 @@ public class Vaerk {
 			}
 		}
 		return vaerk;
+	}
+
+	@Override
+	public int compareTo(Vaerk o) {
+		return titel.compareToIgnoreCase(o.titel);
 	}
 
 }

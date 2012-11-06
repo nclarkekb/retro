@@ -6,7 +6,7 @@ import java.util.List;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class Periodica {
+public class Periodica implements Comparable<Periodica> {
 
 	public int perId = -1;
 
@@ -28,7 +28,8 @@ public class Periodica {
 					tmpNode = tmpNode.getFirstChild();
 					if (tmpNode != null) {
 						try {
-							System.out.println("perId: " + tmpNode.getNodeValue());
+							// debug
+							//System.out.println("perId: " + tmpNode.getNodeValue());
 							periodica.perId = Integer.parseInt(tmpNode.getNodeValue());
 						} catch (NumberFormatException e) {
 							System.out.println("Epic fail!");
@@ -50,6 +51,11 @@ public class Periodica {
 			}
 		}
 		return periodica;
+	}
+
+	@Override
+	public int compareTo(Periodica o) {
+		return issues.get(0).vaerk.titel.compareToIgnoreCase(o.issues.get(0).vaerk.titel);
 	}
 
 }

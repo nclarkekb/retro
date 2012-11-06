@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.jwat.arc.ArcRecordBase;
 import org.jwat.common.ContentType;
+import org.jwat.common.HeaderLine;
 import org.jwat.common.UriProfile;
 import org.jwat.gzip.GzipEntry;
 import org.jwat.tools.core.ArchiveParser;
@@ -31,10 +32,15 @@ public class RetroFile implements ArchiveParserCallback {
 
 	public Vaerk vaerk;
 
+	public Startside startside;
+
 	public RetroFile() {
 	}
 
+	protected File file;
+
 	public RetroFile processFile(File file) {
+		this.file = file;
 		ArchiveParser archiveParser = new ArchiveParser();
 		archiveParser.uriProfile = UriProfile.RFC3986_ABS_16BIT_LAX;
 		archiveParser.bBlockDigestEnabled = false;
@@ -44,7 +50,7 @@ public class RetroFile implements ArchiveParserCallback {
 	}
 
 	@Override
-	public void apcFileId(int fileId) {
+	public void apcFileId(File file, int fileId) {
 		//System.out.println(fileId);
 	}
 
@@ -64,50 +70,93 @@ public class RetroFile implements ArchiveParserCallback {
 	@Override
 	public void apcWarcRecordStart(WarcRecord warcRecord, long startOffset,
 			boolean compressed) throws IOException {
-		WarcHeader header = warcRecord.header;
-		ContentType contentType = header.contentType;
-		if (contentType != null && "text".equalsIgnoreCase(contentType.contentType) && "xml".equalsIgnoreCase(contentType.mediaType)) {
-			//System.out.println(contentType.toString());
-			//System.out.println(warcRecord.header.warcRecordIdStr);
-			if (warcRecord.hasPayload()) {
-				xmlValidator.parse(warcRecord.getPayload().getInputStream(), null);
-				if (xmlValidator.document != null) {
-					//System.out.println(xmlValidator.document);
-					//System.out.println(xmlValidator.document.getDocumentElement().getNodeName());
-					Node rootNode = xmlValidator.document.getDocumentElement();
-					String rootName = rootNode.getNodeName();
-					if ("periodica".equals(rootName)) {
-						periodica = Periodica.fromXml(rootNode);
-						periodica.contentLength = warcRecord.header.contentLength;
-						// debug
-						//System.out.println(periodica.perId);
-					} else if ("vaerk".equals(rootName)) {
-						vaerk = Vaerk.fromXml(rootNode);
-						vaerk.contentLength = warcRecord.header.contentLength;
-						// debug
-						//System.out.println(vaerk.id);
+		try {
+			WarcHeader header = warcRecord.header;
+			ContentType contentType = header.contentType;
+			if (contentType != null && "text".equalsIgnoreCase(contentType.contentType) && "xml".equalsIgnoreCase(contentType.mediaType)) {
+				//System.out.println(contentType.toString());
+				//System.out.println(warcRecord.header.warcRecordIdStr);
+				if (warcRecord.hasPayload()) {
+					xmlValidator.parse(warcRecord.getPayload().getInputStream(), null);
+					if (xmlValidator.document != null) {
+						//System.out.println(xmlValidator.document);
+						//System.out.println(xmlValidator.document.getDocumentElement().getNodeName());
+						Node rootNode = xmlValidator.document.getDocumentElement();
+						String rootName = rootNode.getNodeName();
+						if ("periodica".equals(rootName)) {
+							periodica = Periodica.fromXml(rootNode);
+							periodica.contentLength = warcRecord.header.contentLength;
+							// debug
+							//System.out.println(periodica.perId);
+						} else if ("vaerk".equals(rootName)) {
+							vaerk = Vaerk.fromXml(rootNode);
+							vaerk.contentLength = warcRecord.header.contentLength;
+							// debug
+							//System.out.println(vaerk.id);
+						}
 					}
 				}
 			}
+			warcRecord.close();
+			if (header.warcRecordIdStr != null) {
+				uris.add(header.warcRecordIdStr);
+			}
+			if (header.warcWarcinfoIdStr != null) {
+				refUris.add(header.warcWarcinfoIdStr);
+			}
+			if (header.warcRefersToStr != null) {
+				refUris.add(header.warcRefersToStr);
+			}
+			for (int i=0; i<header.warcConcurrentToList.size(); ++i) {
+				refUris.add(header.warcConcurrentToList.get(i).warcConcurrentToStr);
+			}
+
+			//header.warcTargetUriStr;
+			/*
+			WARC-Target-URI: http://www.plantedir.dk/publ/VR97/index.htm
+			X-Original-Date: Mon, 13 Sep 1999 09:37:09 GMT
+			X-Original-Vaerkid: 2947
+			X-Original-Reprid: 0
+			X-Original-Filid: 0
+			*/
+
+			String targetURI = header.warcTargetUriStr;
+			Integer vaerkId = null;
+			Integer reprId = null;
+			Integer filId = null;
+
+			HeaderLine hl;
+			hl = warcRecord.getHeader("X-Original-Vaerkid");
+			if (hl != null && hl.value != null && hl.value.length() > 0) {
+				vaerkId = Integer.parseInt(hl.value);
+			}
+			hl = warcRecord.getHeader("X-Original-Reprid");
+			if (hl != null && hl.value != null && hl.value.length() > 0) {
+				reprId = Integer.parseInt(hl.value);
+			}
+			hl = warcRecord.getHeader("X-Original-Filid");
+			if (hl != null && hl.value != null && hl.value.length() > 0) {
+				filId = Integer.parseInt(hl.value);
+			}
+
+			if (filId != null && filId == 0) {
+				startside = new Startside();
+				startside.targetURI = targetURI;
+				startside.vaerkId = vaerkId;
+				startside.reprId = reprId;
+				startside.filId = filId;
+			}
+		} catch (Throwable t) {
+			System.out.println("Exception while processing: " + file.getPath());
 		}
-		warcRecord.close();
-		if (header.warcRecordIdStr != null) {
-			uris.add(header.warcRecordIdStr);
-		}
-		if (header.warcWarcinfoIdStr != null) {
-			refUris.add(header.warcWarcinfoIdStr);
-		}
-		if (header.warcRefersToStr != null) {
-			refUris.add(header.warcRefersToStr);
-		}
-		for (int i=0; i<header.warcConcurrentToList.size(); ++i) {
-			refUris.add(header.warcConcurrentToList.get(i).warcConcurrentToStr);
-		}
-		//header.warcTargetUriStr;
 	}
 
 	@Override
 	public void apcRuntimeError(Throwable t, long offset, long consumed) {
+	}
+
+	@Override
+	public void apcDone() {
 	}
 
 }
