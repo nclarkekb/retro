@@ -85,11 +85,15 @@ public class RetroFile implements ArchiveParserCallback {
 						String rootName = rootNode.getNodeName();
 						if ("periodica".equals(rootName)) {
 							periodica = Periodica.fromXml(rootNode);
+							periodica.targetURI = header.warcTargetUriStr;
+							periodica.date = header.warcDate;
 							periodica.contentLength = warcRecord.header.contentLength;
 							// debug
 							//System.out.println(periodica.perId);
 						} else if ("vaerk".equals(rootName)) {
 							vaerk = Vaerk.fromXml(rootNode);
+							vaerk.targetURI = header.warcTargetUriStr;
+							vaerk.date = header.warcDate;
 							vaerk.contentLength = warcRecord.header.contentLength;
 							// debug
 							//System.out.println(vaerk.id);
@@ -111,7 +115,10 @@ public class RetroFile implements ArchiveParserCallback {
 				refUris.add(header.warcConcurrentToList.get(i).warcConcurrentToStr);
 			}
 
-			//header.warcTargetUriStr;
+			/*
+			 * Startsider.
+			 */
+
 			/*
 			WARC-Target-URI: http://www.plantedir.dk/publ/VR97/index.htm
 			X-Original-Date: Mon, 13 Sep 1999 09:37:09 GMT
@@ -120,7 +127,6 @@ public class RetroFile implements ArchiveParserCallback {
 			X-Original-Filid: 0
 			*/
 
-			String targetURI = header.warcTargetUriStr;
 			Integer vaerkId = null;
 			Integer reprId = null;
 			Integer filId = null;
@@ -141,7 +147,8 @@ public class RetroFile implements ArchiveParserCallback {
 
 			if (filId != null && filId == 0) {
 				startside = new Startside();
-				startside.targetURI = targetURI;
+				startside.targetURI = header.warcTargetUriStr;
+				startside.date = header.warcDate;
 				startside.vaerkId = vaerkId;
 				startside.reprId = reprId;
 				startside.filId = filId;

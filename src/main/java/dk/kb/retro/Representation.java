@@ -5,11 +5,13 @@ import org.w3c.dom.NodeList;
 
 public class Representation {
 
-	public int vaerkid = -1;
+	public int vaerkId = -1;
 
-	public int reprid = -1;
+	public int reprId = -1;
 
 	public String url;
+
+	public Startside startside;
 
 	public static Representation fromXml(Node parentNode) {
 		Node tmpNode;
@@ -26,7 +28,7 @@ public class Representation {
 						try {
 							// debug
 							//System.out.println("reprVaerkId: " + tmpNode.getNodeValue());
-							representation.vaerkid = Integer.parseInt(tmpNode.getNodeValue());
+							representation.vaerkId = Integer.parseInt(tmpNode.getNodeValue());
 						} catch (NumberFormatException e) {
 							System.out.println("Epic fail!");
 						}
@@ -37,7 +39,7 @@ public class Representation {
 						try {
 							// debug
 							//System.out.println("reprId: " + tmpNode.getNodeValue());
-							representation.reprid = Integer.parseInt(tmpNode.getNodeValue());
+							representation.reprId = Integer.parseInt(tmpNode.getNodeValue());
 						} catch (NumberFormatException e) {
 							System.out.println("Epic fail!");
 						}

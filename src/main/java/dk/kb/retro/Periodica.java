@@ -1,5 +1,6 @@
 package dk.kb.retro;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -7,6 +8,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class Periodica implements Comparable<Periodica> {
+
+	public String targetURI;
+
+	public Date date;
 
 	public int perId = -1;
 

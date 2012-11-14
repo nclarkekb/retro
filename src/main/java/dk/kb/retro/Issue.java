@@ -5,11 +5,11 @@ import org.w3c.dom.NodeList;
 
 public class Issue {
 
-	public int perid = 1;
+	public int perId = 1;
 
-	public int numid = -1;
+	public int numId = -1;
 
-	public int vaerkid = -1;
+	public int vaerkId = -1;
 
 	// Set during validation!
 	public Vaerk vaerk;
@@ -29,7 +29,7 @@ public class Issue {
 						try {
 							// debug
 							//System.out.println("issuePerId: " + tmpNode.getNodeValue());
-							issue.perid = Integer.parseInt(tmpNode.getNodeValue());
+							issue.perId = Integer.parseInt(tmpNode.getNodeValue());
 						} catch (NumberFormatException e) {
 							System.out.println("Epic fail!");
 						}
@@ -40,7 +40,7 @@ public class Issue {
 						try {
 							// debug
 							//System.out.println("issueNumId: " + tmpNode.getNodeValue());
-							issue.numid = Integer.parseInt(tmpNode.getNodeValue());
+							issue.numId = Integer.parseInt(tmpNode.getNodeValue());
 						} catch (NumberFormatException e) {
 							System.out.println("Epic fail!");
 						}
@@ -51,7 +51,7 @@ public class Issue {
 						try {
 							// debug
 							//System.out.println("issueVaerkId: " + tmpNode.getNodeValue());
-							issue.vaerkid = Integer.parseInt(tmpNode.getNodeValue());
+							issue.vaerkId = Integer.parseInt(tmpNode.getNodeValue());
 						} catch (NumberFormatException e) {
 							System.out.println("Epic fail!");
 						}
