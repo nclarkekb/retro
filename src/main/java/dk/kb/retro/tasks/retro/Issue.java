@@ -1,4 +1,4 @@
-package dk.kb.retro;
+package dk.kb.retro.tasks.retro;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

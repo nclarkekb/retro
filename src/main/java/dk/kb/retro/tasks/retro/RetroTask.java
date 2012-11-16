@@ -1,4 +1,4 @@
-package dk.kb.retro;
+package dk.kb.retro.tasks.retro;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +25,8 @@ import org.jwat.tools.core.CommandLine;
 import org.jwat.tools.core.CommandLine.Arguments;
 import org.jwat.tools.core.FileIdent;
 import org.jwat.tools.core.Task;
+
+import dk.kb.retro.Retro;
 
 public class RetroTask extends Task {
 
