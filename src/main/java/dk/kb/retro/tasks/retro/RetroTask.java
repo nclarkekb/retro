@@ -482,49 +482,54 @@ public class RetroTask extends Task {
 			for (int i=0; i<periodicaList.size(); ++i) {
 				periodica = periodicaList.get(i);
 				issues = periodica.issues;
-				vaerk = issues.get(0).vaerk;
+				issue = issues.get(0);
+				vaerk = issue.vaerk;
 				sb.append("<div>");
-				sb.append(vaerk.id + ": " + vaerk.titel);
+				sb.append(periodica.perId + ": " + vaerk.titel);
 				sb.append("<br />\n");
 
 				sb.append("<ul>\n");
 				for (int j=0; j<issues.size(); ++j) {
-					issue = issues.get(0);
+					issue = issues.get(j);
 					vaerk = issue.vaerk;
-					sb.append("<li>\n");
-					sb.append(vaerk.id + ": " + vaerk.titel);
-					sb.append("</li>\n");
-
-					sb.append("<ul>\n");
-					for (int k=0; k<vaerk.representations.size(); ++k) {
-						representation = vaerk.representations.get(k);
+					if (vaerk != null) {
 						sb.append("<li>\n");
-						sb.append(" (" + representation.reprId + "): ");
-						if (representation.startside != null) {
-							url = representation.startside.targetURI;
-							date = representation.startside.date;
-							sb.append("<a href=\"");
-							sb.append("http://dia-prod-udv-01.kb.dk:8080/jsp/QueryUI/Redirect.jsp?url=");
-							//sb.append("http%3A%2F%2Fwww.1899.dk%2Fartikler%2Fimages%2Fpol_hm01.jpg");
-							// debug
-							//System.out.println(representation.url.trim());
-							url = URLEncoder.encode(url, "UTF-8");
-							sb.append(url);
-							url.replaceAll(":", "%3A");
-							url.replaceAll("/", "%2F");
-							sb.append("&time=");
-							//sb.append("20041005122705");
-							sb.append(arcDateFormat.format(date));
-							sb.append("\">");
-						} else {
-							sb.append("Mangler startside!");
-						}
-						sb.append(representation.url);
-						sb.append("</a>");
+						sb.append(vaerk.id + ": " + vaerk.titel);
 						sb.append("</li>\n");
-					}
-					sb.append("</ul>\n");
 
+						sb.append("<ul>\n");
+						for (int k=0; k<vaerk.representations.size(); ++k) {
+							representation = vaerk.representations.get(k);
+							sb.append("<li>\n");
+							sb.append(" (" + representation.reprId + "): ");
+							if (representation.startside != null) {
+								url = representation.startside.targetURI;
+								date = representation.startside.date;
+								sb.append("<a href=\"");
+								sb.append("http://dia-prod-udv-01.kb.dk:8080/jsp/QueryUI/Redirect.jsp?url=");
+								//sb.append("http%3A%2F%2Fwww.1899.dk%2Fartikler%2Fimages%2Fpol_hm01.jpg");
+								// debug
+								//System.out.println(representation.url.trim());
+								url = URLEncoder.encode(url, "UTF-8");
+								sb.append(url);
+								url.replaceAll(":", "%3A");
+								url.replaceAll("/", "%2F");
+								sb.append("&time=");
+								//sb.append("20041005122705");
+								sb.append(arcDateFormat.format(date));
+								sb.append("\">");
+							} else {
+								sb.append("Mangler startside!");
+							}
+							sb.append(representation.url);
+							sb.append("</a>");
+							sb.append("</li>\n");
+						}
+						sb.append("</ul>\n");
+					} else {
+						// debug
+						System.out.println("null vaerk in issues: " + issue.perId + " - " + issue.numId + " - " + issue.vaerkId);
+					}
 				}
 				sb.append("</ul>\n");
 
